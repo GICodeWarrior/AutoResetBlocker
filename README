@@ -14,10 +14,10 @@ confirmation the vulnerability exists on at least these additional phones:
 Droid Incredible, ATRIX, Nexus One, One X, Defy
 
 Configure and verify it works for you:
-1. Try this IMEI test: http://jsfiddle.net/kKFn8/
+1. Try this IMEI test: http://git.io/HtEU4Q
 2. Check the box to make "Auto-reset blocker" the default action
 3. Auto-reset blocker will show you the malicious number
-4. Open this safe telephone number test: http://jsfiddle.net/tLHpw/
+4. Open this safe telephone number test: http://git.io/3LZlrQ
 5. Auto-reset blocker will show the safe number
 6. Touch "Dial"
 7. Your normal dialer will open with the safe number
