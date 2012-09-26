@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    package="net.gicode.android.autoresetblocker"
+    android:versionCode="3"
+    android:versionName="2.0.0" >
+
+    <uses-sdk
+        android:minSdkVersion="3"
+        android:targetSdkVersion="16" />
+
+    <uses-feature android:name="android.hardware.telephony" />
+
+    <application
+        android:icon="@drawable/ic_launcher"
+        android:label="@string/title" >
+        <activity android:name="AutoResetBlockerActivity" >
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
+                <action android:name="android.intent.action.DIAL" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+
+                <data android:scheme="tel" />
+            </intent-filter>
+        </activity>
+    </application>
+
+</manifest>
