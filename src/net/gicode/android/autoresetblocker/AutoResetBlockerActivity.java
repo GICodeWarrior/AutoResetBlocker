@@ -8,6 +8,7 @@ import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
 import android.content.pm.ActivityInfo;
 import android.content.pm.ResolveInfo;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.view.View;
@@ -41,11 +42,13 @@ public class AutoResetBlockerActivity extends Activity {
 		String number = intent.getData().getSchemeSpecificPart();
 		number = number.replaceFirst("^//", "");
 
-		boolean safe = number.matches("[0-9.\\-() +]+");
+		boolean safe = number.matches("[0-9.\\-() +]*");
 		String type = safe ? "safe" : "malicious";
 
 		TextView labelView = (TextView) findViewById(R.id.number_label);
 		labelView.setText("This phone number appears " + type + ".");
+		labelView.setTextColor(safe ? Color.GREEN : Color.RED);
+
 		EditText numberView = (EditText) findViewById(R.id.number);
 		numberView.setText(number);
 
