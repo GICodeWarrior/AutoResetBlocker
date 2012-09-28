@@ -82,7 +82,7 @@ public class AutoResetBlockerActivity extends Activity {
 			if (getClass().getCanonicalName().equals(info.name)) {
 				info = activities.get(1).activityInfo;
 			}
-			dialIntent = intent.setClassName(info.packageName, info.name);
+			dialIntent = cleanIntent.setClassName(info.packageName, info.name);
 		}
 
 		if (safe && autoDialOption.isChecked()) {
