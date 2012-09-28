@@ -8,14 +8,15 @@ import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
 import android.content.pm.ActivityInfo;
 import android.content.pm.ResolveInfo;
-import android.graphics.Color;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
+import android.text.ClipboardManager;
 import android.view.View;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.EditText;
+import android.widget.LinearLayout.LayoutParams;
 import android.widget.TextView;
 
 public class AutoResetBlockerActivity extends Activity {
@@ -29,9 +30,6 @@ public class AutoResetBlockerActivity extends Activity {
 
 		setContentView(R.layout.blocker_activity);
 
-		Button dialButton = (Button) findViewById(R.id.dial);
-		dialButton.setOnClickListener(new DialListener());
-
 		CheckBox autoDialOption = (CheckBox) findViewById(R.id.auto_dial);
 		autoDialOption.setOnCheckedChangeListener(new AutoDialListener());
 
@@ -43,22 +41,42 @@ public class AutoResetBlockerActivity extends Activity {
 		number = number.replaceFirst("^//", "");
 
 		boolean safe = number.matches("[0-9.\\-() +]*");
-		String type = safe ? "safe" : "malicious";
 
-		TextView labelView = (TextView) findViewById(R.id.number_label);
-		labelView.setText("This phone number appears " + type + ".");
-		labelView.setTextColor(safe ? Color.GREEN : Color.RED);
+		TextView descriptionView = (TextView) findViewById(R.id.number_description);
+		descriptionView.setText(safe ? R.string.safe_number_description
+				: R.string.malicious_number_description);
 
 		EditText numberView = (EditText) findViewById(R.id.number);
 		numberView.setText(number);
+
+		Button copyNumber = (Button) findViewById(R.id.copy_number);
+		copyNumber.setOnClickListener(new CopyListener(numberView));
+
+		Button dialButton = (Button) findViewById(R.id.dial);
+		LayoutParams dialButtonParams = (LayoutParams) dialButton
+				.getLayoutParams();
+		dialButtonParams.weight = safe ? 1 : 0;
+		dialButton.setText(safe ? R.string.safe_dial : R.string.malicious_dial);
+		dialButton.setLines(safe ? 3 : 1);
+		dialButton.setOnClickListener(new DialListener());
+
+		Button dismissButton = (Button) findViewById(R.id.dismiss);
+		LayoutParams dismissButtonParams = (LayoutParams) dismissButton
+				.getLayoutParams();
+		dismissButtonParams.weight = safe ? 0 : 1;
+		dismissButton.setText(safe ? R.string.safe_dismiss
+				: R.string.malicious_dismiss);
+		dismissButton.setLines(safe ? 1 : 3);
+		dismissButton.setOnClickListener(new DismissListener());
 
 		Intent cleanIntent = new Intent(intent.getAction(), intent.getData());
 		List<ResolveInfo> activities = getPackageManager()
 				.queryIntentActivities(cleanIntent, 0);
 
 		if (!safe || (activities.size() != 2)) {
-			dialIntent = Intent.createChooser(intent, "Dial " + type
-					+ " number");
+			CharSequence title = getText(safe ? R.string.safe_launch_title
+					: R.string.malicious_launch_title);
+			dialIntent = Intent.createChooser(intent, title);
 		} else {
 			ActivityInfo info = activities.get(0).activityInfo;
 			if (getClass().getCanonicalName().equals(info.name)) {
@@ -72,9 +90,28 @@ public class AutoResetBlockerActivity extends Activity {
 		}
 	}
 
+	private class CopyListener implements View.OnClickListener {
+		private TextView contents;
+
+		public CopyListener(TextView contents) {
+			this.contents = contents;
+		}
+
+		public void onClick(View v) {
+			ClipboardManager clipboard = (ClipboardManager) getSystemService(CLIPBOARD_SERVICE);
+			clipboard.setText(contents.getText());
+		}
+	}
+
 	private class DialListener implements View.OnClickListener {
 		public void onClick(View v) {
 			startActivity(dialIntent);
+		}
+	}
+
+	private class DismissListener implements View.OnClickListener {
+		public void onClick(View v) {
+			finish();
 		}
 	}
 
