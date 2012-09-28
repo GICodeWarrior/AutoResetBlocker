@@ -72,6 +72,16 @@ public class AutoResetBlockerActivity extends Activity {
 		Intent cleanIntent = new Intent(intent.getAction(), intent.getData());
 		List<ResolveInfo> activities = getPackageManager()
 				.queryIntentActivities(cleanIntent, 0);
+		ResolveInfo removeItem = null;
+		for (ResolveInfo resolveInfo : activities) {
+			if (resolveInfo.activityInfo.name
+					.equals("com.android.contacts.activities.NonPhoneActivity")) {
+				removeItem = resolveInfo;
+			}
+		}
+		if (removeItem != null) {
+			activities.remove(removeItem);
+		}
 
 		if (!safe || (activities.size() != 2)) {
 			CharSequence title = getText(safe ? R.string.safe_launch_title
