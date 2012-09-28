@@ -3,16 +3,16 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
-    <title>Normal Test</title>
+    <title>Double Slash Test</title>
 
     <style>
       iframe { width: 1px; height: 1px; border: none; }
     </style>
   </head>
   <body>
-    <h1>Normal Test</h1>
-    <p>Attempting to load "tel:%2B1%20(123)-123.1234" (+1 (123)-123.1234)</p>
+    <h1>Double Slash Test</h1>
+    <p>Attempting to load "tel://1231231234" (1231231234)</p>
     <button onclick="location.reload();">Reload Test</button>
-    <iframe src="tel:%2B1%20(123)-123.1234"></iframe>
+    <iframe src="tel://1231231234"></iframe>
   </body>
 </html>
